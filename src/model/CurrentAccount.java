@@ -1,8 +1,11 @@
 package model;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import exceptionsProyect.RetirementExceededException;
 
 public class CurrentAccount extends Account {
 	private double overDraft;
@@ -49,7 +52,7 @@ public class CurrentAccount extends Account {
 
 			@Override
 			public String toString() {
-				return "CheckBook [numberFrom=" + numberFrom + ", numberTo=" + numberTo + "]";
+				return "Cheques : Desde=" + numberFrom + ", Hacia=" + numberTo + ".\n";
 			}
 			
 			
@@ -63,17 +66,17 @@ public class CurrentAccount extends Account {
 	@Override
 	public void deposit(double value) {
 		this.residue+=value;
-		
 	}
 
 
 	@Override
-	public boolean retirement(double value) {
+	public boolean retirement(double value) throws RetirementExceededException {
 		if(this.residue+overDraft-value>=0) {
 			this.residue-=value;
 			return true;
+		}else {
+			throw new RetirementExceededException("Ha excedido la cantidad a retirar.Volvera al menu de inicio");
 		}
-		return false;
 	}
 	public double getOverDraft() {
 		return overDraft;
@@ -87,11 +90,13 @@ public class CurrentAccount extends Account {
 	public void setCheckBooks(ArrayList<CheckBook> checkBooks) {
 		this.checkBooks = checkBooks;
 	}
-
 	@Override
 	public String toString() {
-		return "CurrentAccount [overDraft=" + overDraft + ", checkBooks=" + checkBooks + "]";
+		return "Cuenta Corriente: \nNo.Cuenta=" + number + ", \nSaldo=" + residue
+				+ ", \nFecha creacion=" + convertCalendarToFormat() + "\nCheques=" + checkBooks +"\n";
 	}
+
+
 	
 	
 	

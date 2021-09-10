@@ -1,7 +1,10 @@
 package model;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+
+import exceptionsProyect.RetirementExceededException;
 
 public class DepositAccount extends Account {
 	private int minResidue;
@@ -26,13 +29,15 @@ public class DepositAccount extends Account {
 	}
 
 	@Override
-	public boolean retirement(double value) {
+	public boolean retirement(double value) throws RetirementExceededException {
 		// TODO Auto-generated method stub
 		if(this.residue-value>=minResidue) {
 			this.residue-=value;
 			return true;
+		}else {
+			throw new RetirementExceededException("Ha excedido la cantidad a retirar.Volvera al menu de inicio");
+			
 		}
-		return false;
 	}
 
 	public int getMinResidue() {
@@ -49,7 +54,16 @@ public class DepositAccount extends Account {
 
 	@Override
 	public boolean addCheckBook(String numberFrom, String numberTo) {
+		
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		DecimalFormat df = new DecimalFormat("#.00");
+		return "Cuenta de ahorro \nNumero de cuenta=" + number + ", \nSaldo=" + residue + ", \nFecha de creacion=" + convertCalendarToFormat() +"\nInteres mensual= "+df.format(calculateInterest())+ "\n";
+	}
+	
+	
 
 }

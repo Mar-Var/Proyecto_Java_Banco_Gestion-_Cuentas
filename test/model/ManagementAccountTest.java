@@ -7,6 +7,8 @@ import java.util.Calendar;
 
 import org.junit.jupiter.api.Test;
 
+import exceptionsProyect.RetirementExceededException;
+
 class ManagementAccountTest {
 		CurrentAccount ca1;
 		CurrentAccount ca2;
@@ -22,9 +24,9 @@ class ManagementAccountTest {
 		ca3= new CurrentAccount("123458", 0, Calendar.getInstance(), 45);
 
 		
-		da1= new DepositAccount("123456", 0, Calendar.getInstance(), 100);
-		da2= new DepositAccount("223457", 0, Calendar.getInstance(), 100);
-		da3= new DepositAccount("323458", 0, Calendar.getInstance(), 100);
+		da1= new DepositAccount("123456", 100, Calendar.getInstance(), 10);
+		da2= new DepositAccount("223457",100, Calendar.getInstance(), 10);
+		da3= new DepositAccount("323458", 180, Calendar.getInstance(), 10);
 
 	}
 
@@ -37,14 +39,14 @@ class ManagementAccountTest {
 	}
 
 	@Test
-	void testRetirement() {
+	void testRetirement() throws RetirementExceededException {
 		Case1();
-		assertTrue(ca1.retirement(25));
+		assertTrue(ca1.retirement(1));
 		assertTrue(ca2.retirement(35));
 		assertTrue(ca3.retirement(45));
-		assertFalse(da1.retirement(25));
-		assertFalse(da2.retirement(35));
-		assertFalse(da3.retirement(150));
+		assertTrue(da1.retirement(25));
+		assertTrue(da2.retirement(35));
+		assertTrue(da3.retirement(150));
 	}
 
 	@Test

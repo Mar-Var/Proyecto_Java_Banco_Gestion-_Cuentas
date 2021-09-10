@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import exceptionsProyect.AccountHasNotCheckBookException;
 import exceptionsProyect.EmptyFieldsException;
 import exceptionsProyect.NullEntry;
 import exceptionsProyect.NumberAccountNotFoundException;
@@ -203,7 +205,9 @@ public class ManagementAccount {
 		return false;
 	}
 	/**
-	 * Este metodo permite añadir un objeto de tipo CheckBook al ArrayList contenedor del objeto tipo Account.
+	 * Este metodo permite añadir un objeto de tipo CheckBook al ArrayList contenedor del objeto tipo Account.Se debe tener en cuenta que los identificadores de las cuentas suministrados
+	  como parametros deben pertenecer a identificadores de Objetos(Cuentas) creadas anteriormente, de lo contrario no s epodra efectuar la operacion y lanzara excepciones. 
+	  Validar entradas tambien lanzara excepciones
 	 * @param number El parametro number es de tipo String y es el identificador de la cuenta que se esta buscando.
 	 * @param numberFrom El parametro numberFrom es de tipo String y es el identificador de la cuenta del propietario.
 	 * @param numberTo El parametro numberTo es de tipo String y es el identificador de la cuenta de destinatario del cheque.
@@ -211,8 +215,9 @@ public class ManagementAccount {
 	 * @throws NullEntry Excepcion que avisa cuando alguna entrada es de tipo null
 	 * @throws EmptyFieldsException Excepcion que es lanzada cuando algun dato de entrada es vacio
 	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando @param number no existe o no fue inicializado.
+	 * @throws AccountHasNotCheckBookException  Excepcion que se lanza en caso de que la cuenta sea de tipo {@link DepositAccount} y busque el libro de cheques.
 	 */
-	public boolean addCheckBook(String number ,String numberFrom,String numberTo ) throws EmptyFieldsException,NullEntry,NumberAccountNotFoundException {
+	public boolean addCheckBook(String number ,String numberFrom,String numberTo ) throws EmptyFieldsException,NullEntry,NumberAccountNotFoundException, AccountHasNotCheckBookException {
 		
 		if(number!=null&&numberFrom!=null&&numberTo!=null) {
 			if(number!=""||numberFrom!=""||numberTo!="") {

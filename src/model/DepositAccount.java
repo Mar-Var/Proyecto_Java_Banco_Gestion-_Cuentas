@@ -4,15 +4,30 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+import exceptionsProyect.AccountHasNotCheckBookException;
+
+/**
+ * Clase que hereda de la la clase Account
+ */
+
 import exceptionsProyect.RetirementExceededException;
 
 public class DepositAccount extends Account {
 	private int minResidue;
 	final static float INTEREST_RATE=0.05f;
-	
+	/**
+	 * Constructor vacio de la clase DepositAccount
+	 */
 	public DepositAccount() {
 		
 	}
+	/**
+	 * Constructor de la clase DepositAccount
+	 * @param number El parametro number representa el numero con el que se identifica una cuenta en el banco.
+	 * @param residue El parametro initialResidue es de tipo String y representa el saldo de la cuenta de banco.
+	 * @param dateCreation El parametro dateCreation2 representa un dato de tipo Calendar para guardar la fecha actual.
+	 * @param minResidue El parametro minResidue es un dato de tipo entero que representa la cantidad minima que puede tener una cuenta de banco de tipo DepositAccount
+	 */
 	
 	public DepositAccount(String number, double residue, Calendar dateCreation,int minResidue) {
 		super(number, residue, dateCreation);
@@ -21,7 +36,7 @@ public class DepositAccount extends Account {
 		this.dateCreation=dateCreation;
 		this.minResidue=minResidue;
 	}
-
+	
 	@Override
 	public void deposit(double value) {
 		// TODO Auto-generated method stub
@@ -54,7 +69,6 @@ public class DepositAccount extends Account {
 
 	@Override
 	public boolean addCheckBook(String numberFrom, String numberTo) {
-		
 		return false;
 	}
 

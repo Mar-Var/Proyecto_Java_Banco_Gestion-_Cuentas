@@ -7,14 +7,28 @@ import java.util.Calendar;
 
 import exceptionsProyect.RetirementExceededException;
 
+/**
+ * Clase que hereda de {@link Account}
+ * @author Marcos Esteban vargas Avella
+ *
+ */
 public class CurrentAccount extends Account {
 	private double overDraft;
 	private ArrayList<CheckBook> checkBooks;
 
-	
+	/**
+	 * Constructor vacio de la clase {@link CurrentAccount}
+	 */
 	public CurrentAccount() {
 		
 	}
+	/**
+	 * Constructor de la clase {@link CurrentAccount}
+	 * @param number El parametro number representa el numero con el que se identifica una cuenta en el banco.
+	 * @param residue El parametro initialResidue es de tipo String y representa el saldo de la cuenta de banco.
+	 * @param dateCreation El parametro dateCreation2 representa un dato de tipo Calendar para guardar la fecha actual.
+	 * @param overDraft el parametro {@link Override} es un dato tipo double que representa la cantidad maxima que puede adeudar al banco
+	 */
 	public CurrentAccount(String number, double residue, Calendar dateCreation, double overDraft) {
 		super();
 		this.number=number;
@@ -24,11 +38,21 @@ public class CurrentAccount extends Account {
 		checkBooks= new ArrayList<>();
 	}
 	
+	/**
+	 * 
+	 *Clase dependiente de {@link CurrentAccount}
+	 *
+	 */
+	
 	class CheckBook {
 			
 			private String numberFrom;
 			private String numberTo;
-			
+			/**
+			 * Constructor de la clase {@link CheckBook}
+			 * @param numberFrom El parametro numberFrom es un dato de tipo String que representa desde que cuenta se realizara una transaccion
+			 * @param numberTo El parametro numberFrom es un dato de tipo String que representa hacia que cuenta se realizara una transaccion
+			 */
 			public CheckBook(String numberFrom, String numberTo) {
 				this.numberFrom = numberFrom;
 				this.numberTo = numberTo;

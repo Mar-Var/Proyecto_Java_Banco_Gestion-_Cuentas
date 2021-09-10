@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import exceptionsProyect.AccountHasNotCheckBookException;
 import model.CurrentAccount.CheckBook;
 /**
  * Clase tipo abstracto que implementa los metodos de la Interface ActionsAccount 
@@ -37,7 +39,7 @@ public abstract class Account implements ActionsAccount {
 	 * Metodo abstracto para añadir una billetera a una cuenta
 	 * @param numberFrom Parametro tipo String que define la cuenta desde donde se realiza una transaccion
 	 * @param numberTo Parametro tipo String que define la cuenta a donde se va a realizar una transaccion.
-	 * @return
+	 * @return Dato tipo booleano, true si la llamada a la operacion  addCheckBook de {@link CurrentAccount} es true, de lo contrario es false o manda excepciones.
 	 */
 	
 	public abstract boolean addCheckBook(String numberFrom, String numberTo);

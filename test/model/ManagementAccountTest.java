@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import org.junit.jupiter.api.Test;
 
+import exceptionsProyect.AccountAlreadyExistException;
 import exceptionsProyect.EmptyFieldsException;
 import exceptionsProyect.NullEntry;
 import exceptionsProyect.NumberAccountNotFoundException;
@@ -36,7 +37,7 @@ class ManagementAccountTest {
 
 	}
 	@Test
-	void testDeposity() throws RestrictiveCosntructorInitialValuesException, NullEntry, EmptyFieldsException, NumberAccountNotFoundException {
+	void testDeposity() throws RestrictiveCosntructorInitialValuesException, NullEntry, EmptyFieldsException, NumberAccountNotFoundException, AccountAlreadyExistException {
 		ManagementAccount ma = new ManagementAccount();
 		String[] Ca1=ma.addInformationAcount("123456", "0", "10");
 		String[] Ca2=ma.addInformationAcount("123457", "1", "10");
@@ -174,7 +175,9 @@ class ManagementAccountTest {
 		assertTrue(ma.addAccount(ETypeAccount.CURRENT, Ca5));
 		assertTrue(ma.addAccount(ETypeAccount.CURRENT, Ca6));
 		
-		assertFalse(ma.addAccount(ETypeAccount.DEPOSIT, Da1));
+		assertThrows(AccountAlreadyExistException.class,()->{
+			ma.addAccount(ETypeAccount.DEPOSIT, Da1);
+			});
 		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da2));
 		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da3));
 		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da4));

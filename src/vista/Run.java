@@ -67,39 +67,45 @@ public class Run {
 						break;
 					case "Borra cuenta":
 						numberAccount = (String)JOptionPane.showInputDialog(null,"Inglese el numero de la cuenta que desea eliminar");
-						
-						if(ma.deleteAccount(numberAccount)) {
-							JOptionPane.showMessageDialog(null, "El borrado de su cuenta se ha realizado satisfactoriamente");
-						}else {
-							JOptionPane.showMessageDialog(null, "Hubo un error durante el borrado de la cuenta.\n"
-									+ "Pues que la cuenta no exista");
+						try {
+							if(ma.deleteAccount(numberAccount)) {
+								JOptionPane.showMessageDialog(null, "El borrado de su cuenta se ha realizado satisfactoriamente");
+							}
+							
+						}catch (Exception e) {
+							JOptionPane.showMessageDialog(null, e.getMessage());
 						}
+
 									
 						break;
 					case "Depositar dinero":
 						numberAccount = (String)JOptionPane.showInputDialog(null,"Inglese el numero de la cuenta que a la que desea depositar");
-						double valueDesposite=Double.parseDouble(JOptionPane.showInputDialog(null,"Ingrese el el valor que desea depositar"));
+						
 						try {
+							double valueDesposite=Double.parseDouble(JOptionPane.showInputDialog(null,"Ingrese el el valor que desea depositar"));
 							JOptionPane.showMessageDialog(null, "El deposito su cuenta se ha realizado satisfactoriamente\n"
 									+ "Nuevo Saldo: "+ma.deposity(numberAccount, valueDesposite));
 							
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(null, e.getMessage());
+							JOptionPane.showMessageDialog(null, "Operacion fracasada.");
 						}
 						
 						break;
 					case "Retirar dinero":
 						
 						numberAccount = (String)JOptionPane.showInputDialog(null,"Inglese el numero de la cuenta de la que desea retirar el dinero");
-						double valueRetire=Double.parseDouble(JOptionPane.showInputDialog(null,"Inglese elvalor que desea retirar"));
+
 						
 						try {
+							double valueRetire=Double.parseDouble(JOptionPane.showInputDialog(null,"Inglese elvalor que desea retirar"));
 							ma.retirement(numberAccount, valueRetire);
 							JOptionPane.showMessageDialog(null, "El retiro de su cuenta se ha realizado satisfactoriamente.\n"
 									+ "Nuevo saldo: "+ma.findAccount(numberAccount).getResidue());
 							
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(null, e.getMessage());
+							JOptionPane.showMessageDialog(null, "Operacion fracasada.");
 						}
 
 						
@@ -114,6 +120,7 @@ public class Run {
 							
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(null, e.getMessage());
+							JOptionPane.showMessageDialog(null, "Operacion fracasada.");
 						}
 
 						
@@ -126,6 +133,7 @@ public class Run {
 							
 						}catch (Exception e) {
 							JOptionPane.showMessageDialog(null, e.getMessage());
+							JOptionPane.showMessageDialog(null, "Operacion fracasada.");
 						}
 					
 						

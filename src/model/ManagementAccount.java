@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import exceptionsProyect.AccountAlreadyExistException;
 import exceptionsProyect.AccountHasNotCheckBookException;
 import exceptionsProyect.EmptyFieldsException;
 import exceptionsProyect.NullEntry;
@@ -34,7 +35,7 @@ public class ManagementAccount {
 	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando @param number no existe o no fue inicializado.
 	 */
 	
-	public double deposity(String number,double value) throws NullEntry,EmptyFieldsException,NumberAccountNotFoundException {
+	public double deposity(String number,double value) throws NullEntry,EmptyFieldsException,NumberAccountNotFoundException,NumberFormatException {
 		if(number!=null) {
 			if(findAccount(number)!=null) {
 				findAccount(number).deposit(value);
@@ -153,9 +154,10 @@ public class ManagementAccount {
 	 * @return Tipo de dato booleano, true si el objeto fue añadido correctamente, false si no fue añadido.
 	 * @throws RestrictiveCosntructorInitialValuesException Excepcion que es lanzada cuando en la cuenta de tipo {@link DepositAccount} el valor inicial de saldo
 	 	es menor al valor minimo de la cuenta
+	 * @throws AccountAlreadyExistException Excepcion que se lanza cuando una cuenta ya existe dentro del sistema.
 	 */
 	
-	public boolean addAccount(ETypeAccount typeAccount, String[] data) throws RestrictiveCosntructorInitialValuesException {
+	public boolean addAccount(ETypeAccount typeAccount, String[] data) throws RestrictiveCosntructorInitialValuesException, AccountAlreadyExistException {
 		
 		if(findAccount(data[0])==null) {
 			 
@@ -174,6 +176,8 @@ public class ManagementAccount {
 			 }
 			 
 					 
+		 }else {
+			 throw new AccountAlreadyExistException("Esta cuenta ya existe.");
 		 }
 
 		return false;
@@ -192,9 +196,10 @@ public class ManagementAccount {
 	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando @param number no existe o no fue inicializado.
 	 * @throws RestrictiveCosntructorInitialValuesException RestrictiveCosntructorInitialValuesException Excepcion que es lanzada cuando en la cuenta de tipo {@link DepositAccount} el valor inicial de saldo
 	 	es menor al valor minimo de la cuenta
+	 * @throws AccountAlreadyExistException Excepcion que se lanza cuando una cuenta ya existe dentro del sistema.
 	 */
 	
-	public boolean addAccount(String typeAccount,String number,String initialResidue,String overdraft_minResidue) throws NullEntry,EmptyFieldsException, NumberFormatException, NumberAccountNotFoundException, RestrictiveCosntructorInitialValuesException {
+	public boolean addAccount(String typeAccount,String number,String initialResidue,String overdraft_minResidue) throws NullEntry,EmptyFieldsException, NumberFormatException, NumberAccountNotFoundException, RestrictiveCosntructorInitialValuesException, AccountAlreadyExistException {
 		
 		if(typeAccount!=null||number!=null||initialResidue!=null||overdraft_minResidue!=null) {
 				String[] data = {number,initialResidue,overdraft_minResidue};

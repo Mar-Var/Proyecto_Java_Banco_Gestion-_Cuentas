@@ -268,7 +268,7 @@ public class ManagementAccount {
 			if(findAccount(number)!=null) {
 				return findAccount(number).toString();
 			}else {
-				throw new NumberAccountNotFoundException("La cuenta no fue encontrada.\n Volvera al menu de inicio");
+				throw new NumberAccountNotFoundException("La cuenta no fue encontrada.\n Volvera al menu de inicio") ;
 				
 			}
 		}else {

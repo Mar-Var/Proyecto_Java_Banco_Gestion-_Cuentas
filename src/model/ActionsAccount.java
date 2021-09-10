@@ -13,6 +13,7 @@ public interface ActionsAccount {
 	 * @param value Dato de tipo double que hace referencia al valor a sustraer de una cuenta.
 	 * @return Dato tipo boleano, {@code false} si no puede ralizar la operacion , en caso contrario {@code true}
 	 * Excepcion que es lanzada cuando la cantidad que va a ser retirada de una cuenta excede su limite.
+	 * @throws RetirementExceededException  Excepcion que extiende de la interfaz Exception para cuando se quiera retirar una suma que exceda el limite de  de la cuenta para cuentas tipo {@link DepositAccount}.
 	 */
 	public boolean retirement(double value)throws RetirementExceededException;
 

@@ -7,6 +7,7 @@ import exceptionsProyect.AccountHasNotCheckBookException;
 import exceptionsProyect.EmptyFieldsException;
 import exceptionsProyect.NullEntry;
 import exceptionsProyect.NumberAccountNotFoundException;
+import exceptionsProyect.RestrictiveCosntructorInitialValuesException;
 import exceptionsProyect.RetirementExceededException;
 /**
  * Esta clase define la getion de los diferentes procedimientos que puede ralizar un usuario sobre la entidad bancaria.
@@ -15,7 +16,6 @@ import exceptionsProyect.RetirementExceededException;
 
 public class ManagementAccount {
 	// atributos de clase
-	private ETypeAccount typeAccount;
 	private ArrayList<Account> accounts;
 	/**
 	 * Constructor de clase que inicializa la Lista de cuentas.
@@ -23,7 +23,6 @@ public class ManagementAccount {
 	 * 	 */
 	public ManagementAccount() {
 		accounts= new ArrayList<>();
-		typeAccount=null;
 	}
 	/**
 	 * Metodo que retorna un dato tipo double que representa el saldo de la cuenta mas el valor del parametro @param value.
@@ -37,8 +36,15 @@ public class ManagementAccount {
 	
 	public double deposity(String number,double value) throws NullEntry,EmptyFieldsException,NumberAccountNotFoundException {
 		if(number!=null) {
-			findAccount(number).deposit(value);
-			return findAccount(number).getResidue() ;
+			if(findAccount(number)!=null) {
+				findAccount(number).deposit(value);
+				return findAccount(number).getResidue() ;
+				
+			}
+			else {
+				throw new NumberAccountNotFoundException("El numero de la cuenta no existe");
+			}
+
 		}
 		else {
 			throw new NullEntry("Ha cancelado un proceso. Sera enviado al menu de inicio");
@@ -47,9 +53,9 @@ public class ManagementAccount {
 		
 	}
 	/**
-	 * Este metodo permite buscar y realizar una disminucion en el saldo de una cuenta que exista dentro de {@link #account}
+	 * Este metodo permite buscar y realizar una disminucion en el saldo de una cuenta que exista dentro del ArrayList
 	 * @param number El parametro numero representa un String que identifica la cuenta.Su proposito es servir para encontrar la cuenta con esa designacion
-	 * @param value El varametro value es un dato de tipo double cuyo proposito es determinar el monto que va a ser retirado de una cuenta que exista dentro de {@link #account}
+	 * @param value El parametro value es un dato de tipo double cuyo proposito es determinar el monto que va a ser retirado de una cuenta que exista dentro del ArrayList
 	 * @return Dato tipo booleando, true si la operacion fue realizada y false si no se puedo realizar la operacion. 
 	 * @throws NullEntry Excepcion que avisa cuando alguna entrada es de tipo null
 	 * @throws RetirementExceededException Excepcion que es lanzada cuando la cantidad que va a ser retirada de una cuenta excede su limite.
@@ -78,7 +84,7 @@ public class ManagementAccount {
 
 	}
 	/**
-	 * Metodo que permite encontrar el obejto dentro de un arraylist {@link #accounts}
+	 * Metodo que permite encontrar el obejto dentro de un arraylist 
 	 * @param number El parametro number es de tipo String y representa el identificador de la cuenta que se desea buscar.
 	 * @return De tipo Objeto Account. Retorna el objeto en caso de exisitir , de lo contrario es null;
 	 */
@@ -145,9 +151,11 @@ public class ManagementAccount {
 	 * @param typeAccount El parametro typeAccount es un dato de tipo ETypeAccount que representa el tipo de cuenta que se va a crear (CURRENT o DEPOSIT)
 	 * @param data el parametro data es un arreglo de tipo String donde esta toda la informacion que va a ser agregada a la cuenta.
 	 * @return Tipo de dato booleano, true si el objeto fue añadido correctamente, false si no fue añadido.
+	 * @throws RestrictiveCosntructorInitialValuesException Excepcion que es lanzada cuando en la cuenta de tipo {@link DepositAccount} el valor inicial de saldo
+	 	es menor al valor minimo de la cuenta
 	 */
 	
-	public boolean addAccount(ETypeAccount typeAccount, String[] data) {
+	public boolean addAccount(ETypeAccount typeAccount, String[] data) throws RestrictiveCosntructorInitialValuesException {
 		
 		if(findAccount(data[0])==null) {
 			 
@@ -156,7 +164,12 @@ public class ManagementAccount {
 				 return true;
 					 }
 			 else if(typeAccount==ETypeAccount.DEPOSIT) {
-				 accounts.add(new DepositAccount(data[0], Double.parseDouble(data[1]), Calendar.getInstance(),Integer.parseInt(data[2])));
+				 if(Double.parseDouble(data[1])>=Integer.parseInt(data[2])){
+					 accounts.add(new DepositAccount(data[0], Double.parseDouble(data[1]), Calendar.getInstance(),Integer.parseInt(data[2])));
+				 }else {
+					 throw new RestrictiveCosntructorInitialValuesException("El saldo inicial no puede ser menor al minimo saldo de la cuenta.");
+				 }
+				
 				 return true;
 			 }
 			 
@@ -172,35 +185,37 @@ public class ManagementAccount {
 	 * @param number El parametro number es de tipo String y representa el identificador de el numero de cuenta de la cuenta que va a ser creada. 
 	 * @param initialResidue El parametro initialResidue es de tipo String y representa el valor inicial que tendra la cuenta a ser creada.
 	 * @param overdraft_minResidue El parametro overdraft_minResidue es de tipo String y puede representar ya sea el valor de sobregiro maximo que puede tener la cuenta corriente
-	 * @return Tipo de dato booleano, true si el objeto fue añadido correctamente, false si no fue añadido.
+	 * @return Tipo de dato booleano, true si el objeto fue añadido correctamente, lanzara una excepcion en caso de no ser true.
 	 * @throws NumberFormatException Excepcion que es lanzada cuando los datos initialResidue y overdraft_minResidue no son de tipo double/float/int
 	 * @throws NullEntry Excepcion que avisa cuando alguna entrada es de tipo null
 	 * @throws EmptyFieldsException Excepcion que es lanzada cuando algun dato de entrada es vacio
 	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando @param number no existe o no fue inicializado.
+	 * @throws RestrictiveCosntructorInitialValuesException RestrictiveCosntructorInitialValuesException Excepcion que es lanzada cuando en la cuenta de tipo {@link DepositAccount} el valor inicial de saldo
+	 	es menor al valor minimo de la cuenta
 	 */
 	
-	public boolean addAccount(String typeAccount,String number,String initialResidue,String overdraft_minResidue) throws NullEntry,EmptyFieldsException, NumberFormatException, NumberAccountNotFoundException {
+	public boolean addAccount(String typeAccount,String number,String initialResidue,String overdraft_minResidue) throws NullEntry,EmptyFieldsException, NumberFormatException, NumberAccountNotFoundException, RestrictiveCosntructorInitialValuesException {
 		
 		if(typeAccount!=null||number!=null||initialResidue!=null||overdraft_minResidue!=null) {
-			if(typeAccount!=null||number!=null||initialResidue!=null||overdraft_minResidue!=null) {
 				String[] data = {number,initialResidue,overdraft_minResidue};
 				
 				if(typeAccount=="CORRIENTE") {
 					return addAccount(ETypeAccount.CURRENT,data);
 				}
 				else if(typeAccount=="AHORRO") {
-					return addAccount(ETypeAccount.DEPOSIT,data);
+					 if(Double.parseDouble(data[1])>=Integer.parseInt(data[2])){
+						 return addAccount(ETypeAccount.DEPOSIT,data);
+					 }else {
+						 throw new RestrictiveCosntructorInitialValuesException("El saldo inicial no puede ser menor al minimo saldo de la cuenta.");
+					 }
 				}else {
-					throw new EmptyFieldsException("Campos vacios. Sera enviado al menu de inicio");
+					throw new EmptyFieldsException("Ha cancelado una operacion. Sera enviado al menu de inicio");
 				}
-			}
 			
 		}else {
-			throw new NullEntry("Valores nulos encontrados. Sera enviado al menu de inicio");
+			throw new NullEntry("ha cancelado una operacion. Sera enviado al menu de inicio");
 		}
 		
-		
-		return false;
 	}
 	/**
 	 * Este metodo permite añadir un objeto de tipo CheckBook al ArrayList contenedor del objeto tipo Account.Se debe tener en cuenta que los identificadores de las cuentas suministrados
@@ -242,10 +257,10 @@ public class ManagementAccount {
 	}
 	/**
 	 * Este metodo permite buscar una cuenta y mostrar informacion referente a esta.
-	 * @param number
+	 * @param number El parametro number es de tipo String y es el identificador de la cuenta que se esta buscando.
 	 * @return Dato tipo string con la informacion de la cuenta, [Tipo de cuenta, numero identificador,saldo,fecha de creacion,libro de chequess]
 	 * @throws NullEntry Excepcion que avisa cuando alguna entrada es de tipo null
-	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando @param number no existe o no fue inicializado.
+	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando number no existe o no fue inicializado.
 	 */
 	
 	public String viewReport(String number) throws NumberAccountNotFoundException,NullEntry{

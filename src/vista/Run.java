@@ -38,28 +38,28 @@ public class Run {
 						String accountNumber=(String)JOptionPane.showInputDialog(null,"Ingrese porfavor un numero de cuenta");
 						
 						String accountInitialResidue=(String)JOptionPane.showInputDialog(null,"Ingrese la cantidad con la que va a iniciar su cuenta");
-						System.out.println(accountInitialResidue);
 						String overdraft_minResidue=null;
 						try {
 							if(menuTypeAccount==null) {
-								throw new EmptyFieldsException("Tipode cuenta invalido");
+								throw new EmptyFieldsException("Tipo de cuenta invalido");
 							}else {
 								overdraft_minResidue=(menuTypeAccount.equals("CORRIENTE"))?JOptionPane.showInputDialog(null,"Ingrese el sobregiro permitido a la cuenta"):
 									JOptionPane.showInputDialog(null,"Ingrese el residuo minimo que debe tener la cuenta");
 							}	
 						} catch (Exception e) {
+							
+					//		JOptionPane.showMessageDialog(null, e.getMessage());
 						}
 						
 						try {
 							
 							if(ma.addAccount(menuTypeAccount, accountNumber, accountInitialResidue, overdraft_minResidue)) {
 								JOptionPane.showMessageDialog(null, "El registro se ha realizado satisfactoriamente");
-							}else {
-								JOptionPane.showMessageDialog(null, "El registro no se ha realizado satisfactoriamente.\nAsegurese de haber ingresado correctamente los datos"
-										+ "o puede que la cuenta ya este registrada");
-							}							
+							}						
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(null, e.getMessage());
+							JOptionPane.showMessageDialog(null, "El registro no se ha realizado satisfactoriamente.\nAsegurese de haber ingresado correctamente los datos"
+									+ "o puede que la cuenta ya este registrada");
 						}
 
 						

@@ -1,6 +1,5 @@
 package model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -16,7 +15,6 @@ import exceptionsProyect.RetirementExceededException;
 
 public class ManagementAccount {
 	// atributos de clase
-	private Account account;
 	private ETypeAccount typeAccount;
 	private ArrayList<Account> accounts;
 	/**
@@ -223,8 +221,11 @@ public class ManagementAccount {
 			if(number!=""||numberFrom!=""||numberTo!="") {
 				
 				if(findAccount(number)!=null&&findAccount(numberFrom)!=null&&findAccount(numberTo)!=null) {
-					if(findAccount(number).addCheckBook(numberFrom, numberTo)) {
+					if(findAccount(number).addCheckBook(numberFrom, numberTo)&& findAccount(number).getClass()!=DepositAccount.class) {
 						return true;
+					}
+					else {
+						throw new AccountHasNotCheckBookException("Este tipo de cuenta no tiene el servicio de cheques");
 					}
 				}else {
 					throw new NumberAccountNotFoundException("Una cuenta de las anteriores cuentas no se encuentra dentro de nuestros registros.\nVolvera al menu.");
@@ -238,8 +239,6 @@ public class ManagementAccount {
 		}else {
 			throw new NullEntry("Ha cancelado una operacion.\nVolvera al menu de inicio");
 		}
-
-		return false;
 	}
 	/**
 	 * Este metodo permite buscar una cuenta y mostrar informacion referente a esta.

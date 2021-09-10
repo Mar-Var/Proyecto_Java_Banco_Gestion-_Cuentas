@@ -203,14 +203,14 @@ public class ManagementAccount {
 		return false;
 	}
 	/**
-	 * 
-	 * @param number
-	 * @param numberFrom
-	 * @param numberTo
-	 * @return
-	 * @throws EmptyFieldsException
-	 * @throws NullEntry
-	 * @throws NumberAccountNotFoundException
+	 * Este metodo permite añadir un objeto de tipo CheckBook al ArrayList contenedor del objeto tipo Account.
+	 * @param number El parametro number es de tipo String y es el identificador de la cuenta que se esta buscando.
+	 * @param numberFrom El parametro numberFrom es de tipo String y es el identificador de la cuenta del propietario.
+	 * @param numberTo El parametro numberTo es de tipo String y es el identificador de la cuenta de destinatario del cheque.
+	 * @return Tipo de dato booleano. true si se pudo añadir y false en caso contrario.
+	 * @throws NullEntry Excepcion que avisa cuando alguna entrada es de tipo null
+	 * @throws EmptyFieldsException Excepcion que es lanzada cuando algun dato de entrada es vacio
+	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando @param number no existe o no fue inicializado.
 	 */
 	public boolean addCheckBook(String number ,String numberFrom,String numberTo ) throws EmptyFieldsException,NullEntry,NumberAccountNotFoundException {
 		
@@ -236,6 +236,13 @@ public class ManagementAccount {
 
 		return false;
 	}
+	/**
+	 * Este metodo permite buscar una cuenta y mostrar informacion referente a esta.
+	 * @param number
+	 * @return Dato tipo string con la informacion de la cuenta, [Tipo de cuenta, numero identificador,saldo,fecha de creacion,libro de chequess]
+	 * @throws NullEntry Excepcion que avisa cuando alguna entrada es de tipo null
+	 * @throws NumberAccountNotFoundException Excepcion que es lanzada cuando @param number no existe o no fue inicializado.
+	 */
 	
 	public String viewReport(String number) throws NumberAccountNotFoundException,NullEntry{
 		if(number!=null) {
@@ -250,7 +257,11 @@ public class ManagementAccount {
 		}
 	}
 	
-	
+	/**
+	 * Este metodo permite mostrar el promedio de todos los valores residue de los objetos que se encuentran alojados en el ArrayList {@link #accounts}
+	 * @return Dato tipo double que representa la suma de todos los datos de la variable residue de todos los objetos alojado dentro del ArrayList {@link #accounts}
+	 dividido entre el tamaño del Arraylist {@link #accounts}
+	 */
 	public double getAverageAccounts() {
 		double promedio=0;
 		for (Account account : accounts) {

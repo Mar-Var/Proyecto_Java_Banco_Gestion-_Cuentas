@@ -6,6 +6,12 @@ import exceptionsProyect.EmptyFieldsException;
 import exceptionsProyect.NullEntry;
 import model.ManagementAccount;
 
+/**
+ * La clase Run permite ejecutar el programa.
+ * @author Marcos Esteban Vargas Avella
+ *
+ */
+
 public class Run {
 
 	public static void main(String[] args) throws Exception {

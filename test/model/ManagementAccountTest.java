@@ -7,12 +7,17 @@ import java.util.Calendar;
 
 import org.junit.jupiter.api.Test;
 
+import exceptionsProyect.EmptyFieldsException;
+import exceptionsProyect.NullEntry;
+import exceptionsProyect.NumberAccountNotFoundException;
+import exceptionsProyect.RestrictiveCosntructorInitialValuesException;
 import exceptionsProyect.RetirementExceededException;
 
 class ManagementAccountTest {
 		CurrentAccount ca1;
 		CurrentAccount ca2;
 		CurrentAccount ca3;
+		CurrentAccount ca4;
 		
 		DepositAccount da1;
 		DepositAccount da2;
@@ -22,6 +27,7 @@ class ManagementAccountTest {
 		ca1= new CurrentAccount("123456", 0, Calendar.getInstance(), 25);
 		ca2= new CurrentAccount("123457", 0, Calendar.getInstance(), 35);
 		ca3= new CurrentAccount("123458", 0, Calendar.getInstance(), 45);
+		ca4= new CurrentAccount("123458", 0, Calendar.getInstance(), 45);
 
 		
 		da1= new DepositAccount("123456", 100, Calendar.getInstance(), 10);
@@ -29,14 +35,32 @@ class ManagementAccountTest {
 		da3= new DepositAccount("323458", 180, Calendar.getInstance(), 10);
 
 	}
-
 	@Test
-	void testDeposity() {
-		Case1();
-		assertTrue(ca1.addCheckBook("123456", "12345678"));
-		assertTrue(ca1.addCheckBook("123476", "12345678"));
-		assertTrue(ca1.addCheckBook("127456", "12345678"));
+	void testDeposity() throws RestrictiveCosntructorInitialValuesException, NullEntry, EmptyFieldsException, NumberAccountNotFoundException {
+		ManagementAccount ma = new ManagementAccount();
+		String[] Ca1=ma.addInformationAcount("123456", "0", "10");
+		String[] Ca2=ma.addInformationAcount("123457", "1", "10");
+		String[] Ca3=ma.addInformationAcount("123458", "2", "10");
+		String[] Da1=ma.addInformationAcount("223456", "0", "10");
+		String[] Da2=ma.addInformationAcount("323456", "10", "10");
+		String[] Da3=ma.addInformationAcount("423456", "20", "10");
+		
+		assertTrue( ma.addAccount(ETypeAccount.CURRENT, Ca1));
+		assertTrue(ma.addAccount(ETypeAccount.CURRENT, Ca2));
+		assertTrue(ma.addAccount(ETypeAccount.CURRENT, Ca3));
+		
+		assertThrows(RestrictiveCosntructorInitialValuesException.class, ()->{
+			ma.addAccount(ETypeAccount.DEPOSIT, Da1);});
+		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da2));
+		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da3));
+		
+		assertEquals(500,  ma.deposity("123456", 500));
+		assertEquals(501,  ma.deposity("123457", 500));
+		assertEquals(502,  ma.deposity("123458", 500));
+		assertEquals(520,  ma.deposity("423456", 500));
+		
 	}
+
 
 	@Test
 	void testRetirement() throws RetirementExceededException {
@@ -56,14 +80,15 @@ class ManagementAccountTest {
 		String[] Ca2=ma.addInformationAcount("123457", "1", "10");
 		String[] Ca3=ma.addInformationAcount("123458", "2", "10");
 		String[] Da1=ma.addInformationAcount("223456", "0", "10");
-		String[] Da2=ma.addInformationAcount("323456", "0", "10");
-		String[] Da3=ma.addInformationAcount("423456", "0", "10");
+		String[] Da2=ma.addInformationAcount("323456", "10", "10");
+		String[] Da3=ma.addInformationAcount("423456", "20", "10");
 		
 		assertTrue( ma.addAccount(ETypeAccount.CURRENT, Ca1));
 		assertTrue(ma.addAccount(ETypeAccount.CURRENT, Ca2));
 		assertTrue(ma.addAccount(ETypeAccount.CURRENT, Ca3));
 		
-		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da1));
+		assertThrows(RestrictiveCosntructorInitialValuesException.class, ()->{
+			ma.addAccount(ETypeAccount.DEPOSIT, Da1);});
 		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da2));
 		assertTrue(ma.addAccount(ETypeAccount.DEPOSIT, Da3));
 		
@@ -84,9 +109,9 @@ class ManagementAccountTest {
 		String[] Ca1=ma.addInformationAcount("123456", "0", "10");
 		String[] Ca2=ma.addInformationAcount("123457", "1", "10");
 		String[] Ca3=ma.addInformationAcount("123458", "2", "10");
-		String[] Da1=ma.addInformationAcount("223456", "0", "10");
-		String[] Da2=ma.addInformationAcount("323456", "0", "10");
-		String[] Da3=ma.addInformationAcount("423456", "0", "10");
+		String[] Da1=ma.addInformationAcount("223456", "10", "10");
+		String[] Da2=ma.addInformationAcount("323456", "20", "10");
+		String[] Da3=ma.addInformationAcount("423456", "30", "10");
 		
 		ma.addAccount(ETypeAccount.CURRENT, Ca1);
 		ma.addAccount(ETypeAccount.CURRENT, Ca2);
@@ -108,9 +133,9 @@ class ManagementAccountTest {
 		String[] Ca1=ma.addInformationAcount("123456", "0", "10");
 		String[] Ca2=ma.addInformationAcount("123457", "1", "10");
 		String[] Ca3=ma.addInformationAcount("123458", "2", "10");
-		String[] Da1=ma.addInformationAcount("223456", "0", "10");
-		String[] Da2=ma.addInformationAcount("323456", "0", "10");
-		String[] Da3=ma.addInformationAcount("423456", "0", "10");
+		String[] Da1=ma.addInformationAcount("223456", "10", "10");
+		String[] Da2=ma.addInformationAcount("323456", "20", "10");
+		String[] Da3=ma.addInformationAcount("423456", "30", "10");
 		
 		ma.addAccount(ETypeAccount.CURRENT, Ca1);
 		ma.addAccount(ETypeAccount.CURRENT, Ca2);
@@ -136,11 +161,11 @@ class ManagementAccountTest {
 		String[] Ca6=ma.addInformationAcount("123452", "5", "10");
 		
 		
-		String[] Da1=ma.addInformationAcount("123456", "0", "10");
-		String[] Da2=ma.addInformationAcount("223456", "0", "10");
-		String[] Da3=ma.addInformationAcount("323456", "0", "10");
-		String[] Da4=ma.addInformationAcount("423456", "0", "10");
-		String[] Da5=ma.addInformationAcount("523456", "0", "10");
+		String[] Da1=ma.addInformationAcount("123456", "50", "10");
+		String[] Da2=ma.addInformationAcount("223456", "60", "10");
+		String[] Da3=ma.addInformationAcount("323456", "70", "10");
+		String[] Da4=ma.addInformationAcount("423456", "80", "10");
+		String[] Da5=ma.addInformationAcount("523456", "90", "10");
 		
 		assertTrue( ma.addAccount(ETypeAccount.CURRENT, Ca1));
 		assertTrue(ma.addAccount(ETypeAccount.CURRENT, Ca2));
@@ -163,9 +188,9 @@ class ManagementAccountTest {
 		String[] Ca1=ma.addInformationAcount("123456", "0", "10");
 		String[] Ca2=ma.addInformationAcount("123457", "1", "10");
 		String[] Ca3=ma.addInformationAcount("123458", "2", "10");
-		String[] Da1=ma.addInformationAcount("223456", "0", "10");
-		String[] Da2=ma.addInformationAcount("323456", "0", "10");
-		String[] Da3=ma.addInformationAcount("423456", "0", "10");
+		String[] Da1=ma.addInformationAcount("223456", "10", "10");
+		String[] Da2=ma.addInformationAcount("323456", "20", "10");
+		String[] Da3=ma.addInformationAcount("423456", "30", "10");
 		
 		ma.addAccount(ETypeAccount.CURRENT, Ca1);
 		ma.addAccount(ETypeAccount.CURRENT, Ca2);
@@ -175,7 +200,16 @@ class ManagementAccountTest {
 		ma.addAccount(ETypeAccount.DEPOSIT, Da2);
 		ma.addAccount(ETypeAccount.DEPOSIT, Da3);
 		
-		assertTrue(ma.addCheckBook("123456", "123456", "123456"));
+		assertTrue(ma.addCheckBook("123456", "123456", "423456"));
+		assertThrows(NumberAccountNotFoundException.class, ()->{
+			ma.addCheckBook("123456", "123456", "426");
+		});
+		assertThrows(NumberAccountNotFoundException.class, ()->{
+			ma.addCheckBook("1236", "123456", "426");
+		});
+		assertThrows(NumberAccountNotFoundException.class, ()->{
+			ma.addCheckBook("123456", "1256", "423456");
+		});
 		
 		
 		 
@@ -188,19 +222,21 @@ class ManagementAccountTest {
 		String[] Ca1=ma.addInformationAcount("123456", "0", "10");
 		String[] Ca2=ma.addInformationAcount("123457", "1", "10");
 		String[] Ca3=ma.addInformationAcount("123458", "2", "10");
-		String[] Da1=ma.addInformationAcount("223456", "0", "10");
+		String[] Da1=ma.addInformationAcount("223456", "10", "10");
 		String[] Da2=ma.addInformationAcount("323456", "0", "10");
-		String[] Da3=ma.addInformationAcount("423456", "0", "10");
+		String[] Da3=ma.addInformationAcount("423456", "50", "10");
 		
 		ma.addAccount(ETypeAccount.CURRENT, Ca1);
 		ma.addAccount(ETypeAccount.CURRENT, Ca2);
 		ma.addAccount(ETypeAccount.CURRENT, Ca3);
 		
 		ma.addAccount(ETypeAccount.DEPOSIT, Da1);
-		ma.addAccount(ETypeAccount.DEPOSIT, Da2);
+		assertThrows(RestrictiveCosntructorInitialValuesException.class, ()->{
+			ma.addAccount(ETypeAccount.DEPOSIT, Da2);
+		});
 		ma.addAccount(ETypeAccount.DEPOSIT, Da3);
-		
-		assertEquals(0.5, ma.getAverageAccounts());
+		//0+1+2+10+50=63 => 63/5=12.6
+		assertEquals(12.6, ma.getAverageAccounts());
 		
 		
 	}
